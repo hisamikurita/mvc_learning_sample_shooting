@@ -7,10 +7,10 @@ import CommonBase from "js/Common/CommonBase";
  * バリエーションを作って下さい。
  */
 export default class EnemyManager extends CommonBase {
-    constructor (){
+    constructor (canvas){
         super ();
         this.enemysList = []; // Enemy管理配列
-        this.enemysList.push (new Enemy()); //1体だけ生成
+        this.enemysList.push (new Enemy(canvas)); //1体だけ生成
         this.enemysList.forEach(enemy => {
 
             // 死んだ時のリスナー

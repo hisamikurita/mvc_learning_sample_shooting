@@ -1,5 +1,6 @@
 import UnitBase from "js/View/UnitBase";
 import HitTest from "js/Util/HitTest";
+import Bullet from "./Bullet";
 
 /**
  * 自機クラス
@@ -10,11 +11,13 @@ export default class Player extends UnitBase {
         this.canvas = canvas; //canvasオブジェクトを取得する
         this.x = 100;
         this.y = 200;
-        this.playerHalfWidth =25;
-        this.playerHalfHeight =14;
+        this.playerHalfWidth = 25;
+        this.playerHalfHeight = 14;
         this.tx = 0;
         this.ty = 0;
-        this.speed = 6;
+        this.playerSpeed = 2.6;
+        this.bulletCheckCounter = 0;
+        this.bulletSetInteval = 10;
         this.setHP(100);
         this.setWidth(40);
         this.setHeight(40);
@@ -27,6 +30,7 @@ export default class Player extends UnitBase {
         window.addEventListener('keyup', (e) => {
             this.isKeyDown[`key_${e.key}`] = false;
         }, false);
+
     }
 
     /**
@@ -36,17 +40,16 @@ export default class Player extends UnitBase {
     update() {
         // 矢印キー　←↑→↓で動くようにする
         if (this.isKeyDown.key_ArrowLeft === true) {
-            this.x -= this.speed;
+            this.x -= this.playerSpeed;
         };
         if (this.isKeyDown.key_ArrowRight === true) {
-            this.x += this.speed;
+            this.x += this.playerSpeed;
         };
         if (this.isKeyDown.key_ArrowUp === true) {
-            this.y -= this.speed;
+            this.y -= this.playerSpeed;
         };
         if (this.isKeyDown.key_ArrowDown === true) {
-            this.y += this.speed;
-            console.log(this.y)
+            this.y += this.playerSpeed;
         };
         //自機の画面外判定
         this.tx = Math.min(Math.max(this.x, this.playerHalfWidth), this.canvas.width - this.playerHalfWidth);
@@ -56,6 +59,15 @@ export default class Player extends UnitBase {
 
         // スペースキーを押すとBulletが発射されるようにして下さい。
         // Enemyクラスを参考にしてください。
+        if (this.isKeyDown[`key_ `] === true) {
+            // 一定間隔で弾を発射
+            if (this.bulletCheckCounter >= 0) {
+                this.bullet = new Bullet(this.canvas, this.x + this.playerHalfWidth, this.y);
+                this.bullet.setSpeed(4);
+                this.bulletCheckCounter = -this.bulletSetInteval;
+            }
+        };
+        this.bulletCheckCounter++
 
         // 敵の弾に当たったらダメージを受けるようにして下さい。
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");

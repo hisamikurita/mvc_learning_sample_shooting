@@ -6,21 +6,22 @@ import CommonBase from "js/Common/CommonBase";
  * 違う種類の弾を作りたい場合、こちらを複製して下さい。
  */
 export default class Bullet extends CommonBase {
-    constructor (x, y) {
-        super ();
+    constructor(canvas, x, y) {
+        super();
+        this.canvas = canvas;
         this.x = x;
         this.y = y;
         this.damage = 10;
-        this.addEventListener('hitRect', (e, s)=>{
+        this.addEventListener('hitRect', (e, s) => {
             console.log('hit', e.detail);
-            this.destroy ();
-        })
+            this.destroy();
+        });
     }
     /**
      * スピード
      * @param {Number} value 
      */
-    setSpeed (value) {
+    setSpeed(value) {
         // speedというクラスメンバにvalueをセットしてください
         this.speed = value;
     }
@@ -29,37 +30,40 @@ export default class Bullet extends CommonBase {
      * @param {Number} x 
      * @param {Number} y 
      */
-    setVector (x, y) {
+    setVector(x, y) {
         // vectorというクラスメンバオブジェクトにvalueをセットしてください
     }
     /**
      * 与えるダメージ値
      * @param {Number} value 
      */
-    setDamage (value) {
+    setDamage(value) {
         this.damage = value;
     }
     /**
      * EnterFrame.jsの中で
      * requestAnimationFrameから自動的にcallされ続けます。
      */
-    update () {
+    update() {
         // speedと vectorから、弾を移動させてください
         //this.x += ?
         //this.y += ?
         this.x += this.speed;
 
         // canvasの外に出てしまったら、destroy()するよう組んで下さい。
+        if (this.x >= this.canvas.width) {
+            this.destroy();
+        }
     }
     /**
      * 弾の描画
      * @param {ctx} context 
      */
-    draw (context) {
-        context.beginPath ();
-        context.arc ( this.x, this.y, 2, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
-        context.fillStyle = "rgba(255, 255, 0, 1)" ;
-        context.fill ();
+    draw(context) {
+        context.beginPath();
+        context.arc(this.x, this.y, 2, 0 * Math.PI / 180, 360 * Math.PI / 180, false);
+        context.fillStyle = "rgba(255, 255, 255, 1)";
+        context.fill();
         context.stroke();
     }
 }
