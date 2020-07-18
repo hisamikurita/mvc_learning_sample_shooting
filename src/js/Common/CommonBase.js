@@ -16,7 +16,7 @@ export default class CommonBase extends EventTarget {
      * EnterFrame.jsの中で
      * requestAnimationFrameから自動的にcallされ続けます。
      */
-    update () {}
+    update (context) {}
     /**
      * 描画
      * @param {context} context 

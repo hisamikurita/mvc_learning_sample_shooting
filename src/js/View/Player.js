@@ -1,12 +1,13 @@
 import UnitBase from "js/View/UnitBase";
 import HitTest from "js/Util/HitTest";
 import Bullet from "./Bullet";
+import Explosion from "./Explosion";
 
 /**
  * 自機クラス
  */
 export default class Player extends UnitBase {
-    constructor(canvas) {
+    constructor(canvas, dead) {
         super();
         this.canvas = canvas; //canvasオブジェクトを取得する
         this.x = 100;
@@ -18,10 +19,11 @@ export default class Player extends UnitBase {
         this.playerSpeed = 2.6;
         this.bulletCheckCounter = 0;
         this.bulletSetInteval = 10;
-        this.setHP(100);
+        this.setHP(10);
         this.setWidth(40);
         this.setHeight(40);
         this.isKeyDown = {};
+        this.dead = dead;
 
         //キーイベントの判定を行う
         window.addEventListener('keydown', (e) => {
@@ -72,20 +74,24 @@ export default class Player extends UnitBase {
         // 敵の弾に当たったらダメージを受けるようにして下さい。
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");
         if (bullet) {
-            // ダメージを与えて下さい。↓コメントアウトを外していただくですがw
-            // this.setDamage (bullet.damage);
-            // ↑さて、setDamageはどこで定義されているでしょうか？
+            // ダメージを与えて下さい。
+            this.setDamage(bullet.damage);
 
             // HPが0になったら死亡状態にし、MainManageに通知して下さい。
             // そして、MainManager側に、その通知を受け取れるようにして下さい。
-            // console.log (this.HP);
+            if (this.HP < 0) {
+                this.explosion = new Explosion(100, 15, 30, .25);
+                this.explosion.set(this.x, this.y);
+                this.destroy();
+                this.dead;
+            }
         }
     }
 
     /**
      * 機体描画
      * 三角形
-     * @param {ctx} context 
+     * @param {ctx} context
      */
     draw(context) {
         context.beginPath();

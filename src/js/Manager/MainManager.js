@@ -8,19 +8,20 @@ import EnemyManager from "js/Manager/EnemyManager";
  * 指示系統のトップクラス
  */
 export default class MainManager {
-    constructor (canvas){
+    constructor(canvas) {
         // super ();
         this.canvas = canvas;
         //自機を生成（インスタンス化）しています。
         //Playerクラスにて課題を確認し、動くようにしたり、弾をとばせたり
         //するようにしてください。
         //canvasオブジェクトを渡す
-        this.player = new Player (canvas);
+        this.dead = 'プレーヤーは死亡しました';
+        this.player = new Player(canvas, this.dead);
 
         //敵のマネージャークラスです
         //EnemyManagerクラスにて課題を確認し、色々な敵を作ったり、
         //制御してください。
-        this.enemyManager = new EnemyManager (canvas);
+        this.enemyManager = new EnemyManager(canvas);
 
         //UIを表示させて下さい。UIクラスをインスタンス化させます。
         //はViewフォルダにあります
