@@ -15,8 +15,10 @@ export default class MainManager {
         //Playerクラスにて課題を確認し、動くようにしたり、弾をとばせたり
         //するようにしてください。
         //canvasオブジェクトを渡す
-        this.dead = 'プレーヤーは死亡しました';
         this.player = new Player(canvas, this.dead);
+        this.player.addEventListener('playerDead', () => {
+            console.log('playerは死にました');
+        })
 
         //敵のマネージャークラスです
         //EnemyManagerクラスにて課題を確認し、色々な敵を作ったり、

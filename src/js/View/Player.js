@@ -24,6 +24,7 @@ export default class Player extends UnitBase {
         this.setHeight(40);
         this.isKeyDown = {};
         this.dead = dead;
+        this.event = new CustomEvent('playerDead');
 
         //キーイベントの判定を行う
         window.addEventListener('keydown', (e) => {
@@ -83,7 +84,7 @@ export default class Player extends UnitBase {
                 this.explosion = new Explosion(100, 15, 30, .25);
                 this.explosion.set(this.x, this.y);
                 this.destroy();
-                this.dead;
+                this.dispatchEvent(this.event);
             }
         }
     }
