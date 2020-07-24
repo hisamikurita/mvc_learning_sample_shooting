@@ -11,9 +11,9 @@ class EnterFrame extends EventTarget {
         this.targets = [];
         this.context = {};
     }
-    startAnimationFrame(canvas) {
+    startAnimationFrame(canvas, context) {
         this.canvas = canvas;
-        this.context = canvas.getContext('2d');
+        this.context = context;
         requestAnimationFrame(() => {
             this.render();
         });

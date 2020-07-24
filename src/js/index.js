@@ -3,6 +3,8 @@ import EnterFrame from 'js/Common/EnterFrame';
 
 const canvas = document.createElement('canvas');
 document.body.appendChild(canvas);
+const context = canvas.getContext('2d');
+
 
 // Canvasを画面いっぱいに表示する
 function onResize() {
@@ -12,9 +14,10 @@ function onResize() {
 window.addEventListener('resize', onResize);
 onResize();
 
-new MainManager(canvas);
-EnterFrame.startAnimationFrame (canvas);
+new MainManager(canvas, context);
+EnterFrame.startAnimationFrame(canvas, context);
 
 /**
  * entory js　特にこれをいじる必要はありません。
  */
+

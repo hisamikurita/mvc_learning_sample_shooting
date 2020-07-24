@@ -7,24 +7,24 @@ import CommonBase from "js/Common/CommonBase";
  * バリエーションを作って下さい。
  */
 export default class EnemyManager extends CommonBase {
-    constructor (canvas){
-        super ();
+    constructor(canvas) {
+        super();
         this.enemysList = []; // Enemy管理配列
-        this.enemysList.push (new Enemy(canvas)); //1体だけ生成
+        this.enemysList.push(new Enemy(canvas)); //1体だけ生成
         this.enemysList.forEach(enemy => {
 
             // 死んだ時のリスナー
-            enemy.addEventListener ('death', (e) => {
+            enemy.addEventListener('enemyDeath', (e) => {
                 // this.enemysListから死んだenemy を削除
                 this.enemysList = this.enemysList.filter(ene => ene != enemy);
             });
         });
     }
-    
+
     /**
      * EnterFrame.jsの中で
      * requestAnimationFrameから自動的にcallされ続けます。
      */
-    update () {
+    update() {
     }
 }

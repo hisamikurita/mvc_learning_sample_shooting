@@ -10,13 +10,14 @@ import EnterFrame from "js/Common/EnterFrame";
 export default class CommonBase extends EventTarget {
     constructor () {
         super ();
+        // this.canvas = document.querySelector('canvas');
         EnterFrame.addTargets (this);
     }
     /**
      * EnterFrame.jsの中で
      * requestAnimationFrameから自動的にcallされ続けます。
      */
-    update (context) {}
+    update () {}
     /**
      * 描画
      * @param {context} context 

@@ -1,6 +1,7 @@
 import UnitBase from "./UnitBase";
 import Bullet from "./Bullet";
 import HitTest from "../Util/HitTest";
+import Explosion from "./Explosion";
 
 /**
  * 敵のBaseクラス。
@@ -14,11 +15,13 @@ export default class Enemy extends UnitBase {
         this.y = 200;
         this.setHP(5);
         this.crashScore = 10;
-        setInterval(() => {
-            // 一定間隔で弾を発射
-            const bullet = new Bullet(this.canvas, this.x - 10, this.y);
-            bullet.setSpeed(-4);
-        }, 400);
+        this.alpha = 1;
+        this.event = new CustomEvent('enemyDeath');
+
+        // setInterval(() => {
+        //     // 一定間隔で弾を発射
+
+        // }, 400);
     }
     /**
      * EnterFrame.jsの中で
@@ -30,10 +33,23 @@ export default class Enemy extends UnitBase {
         this.y = Math.cos(this.deg * (Math.PI / 180)) * 3 + this.y;
         this.deg++;
 
+        this.bullet = new Bullet(this.canvas, this.x - 10, this.y);
+        this.bullet.setSpeed(-4);
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");
         if (bullet) {
             // 弾にあたったらダメージを与え、EnemyManagerに通知して下さい。
-            // bullet.damage
+            console.log('敵に当たった。')
+            this.setDamage(bullet.damage);
+            this.alpha = .1;
+            if (this.HP < 0) {
+                this.explosion = new Explosion(100, 15, 30, .25);
+                this.explosion.set(this.x, this.y);
+                window.dispatchEvent(this.event);
+                this.destroy();
+            }
+        }
+        if (this.alpha <= 1) {
+            this.alpha += .1;
         }
     }
     /**

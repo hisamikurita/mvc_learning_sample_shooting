@@ -1,5 +1,5 @@
-import UnitBase from "js/View/UnitBase";
-import HitTest from "js/Util/HitTest";
+import UnitBase from "./UnitBase";
+import HitTest from "../Util/HitTest";
 import Bullet from "./Bullet";
 import Explosion from "./Explosion";
 
@@ -7,7 +7,7 @@ import Explosion from "./Explosion";
  * 自機クラス
  */
 export default class Player extends UnitBase {
-    constructor(canvas, dead) {
+    constructor(canvas) {
         super();
         this.canvas = canvas; //canvasオブジェクトを取得する
         this.x = 100;
@@ -23,8 +23,8 @@ export default class Player extends UnitBase {
         this.setWidth(40);
         this.setHeight(40);
         this.isKeyDown = {};
-        this.dead = dead;
         this.event = new CustomEvent('playerDead');
+        this.alpha = 1;
 
         //キーイベントの判定を行う
         window.addEventListener('keydown', (e) => {
@@ -74,18 +74,24 @@ export default class Player extends UnitBase {
 
         // 敵の弾に当たったらダメージを受けるようにして下さい。
         const bullet = HitTest.getHitObjectByClassName(this, "Bullet");
+
         if (bullet) {
             // ダメージを与えて下さい。
             this.setDamage(bullet.damage);
+
+            this.alpha = .1;
 
             // HPが0になったら死亡状態にし、MainManageに通知して下さい。
             // そして、MainManager側に、その通知を受け取れるようにして下さい。
             if (this.HP < 0) {
                 this.explosion = new Explosion(100, 15, 30, .25);
                 this.explosion.set(this.x, this.y);
+                window.dispatchEvent(this.event);
                 this.destroy();
-                this.dispatchEvent(this.event);
             }
+        }
+        if (this.alpha <= 1) {
+            this.alpha += .1;
         }
     }
 
@@ -95,7 +101,11 @@ export default class Player extends UnitBase {
      * @param {ctx} context
      */
     draw(context) {
+        context.save()
         context.beginPath();
+
+        context.globalAlpha = this.alpha;
+
         context.moveTo(this.x - 20, this.y + 10);
         context.lineTo(this.x + 20, this.y);
         context.lineTo(this.x - 20, this.y - 10);
@@ -106,5 +116,7 @@ export default class Player extends UnitBase {
 
         context.fillStyle = "rgba(0,0,255, 1)";//塗りつぶしの色
         context.fill();
+
+        context.restore();
     }
 }
